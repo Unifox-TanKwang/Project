@@ -1,5 +1,10 @@
 {
   "dependencies": {
     "discord.js": "^11.4.2"
-  }
+  },
+  "name": "RobotBot",
+  "version": "0.1.0",
+  "description": "Name is Ro, Ro is discord bot",
+  "main": "App.js",
+  "license": "MIT"
 }
