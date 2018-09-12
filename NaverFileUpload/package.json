@@ -1,8 +1,0 @@
-{
-  "name": "NaverFileUpload",
-  "version": "0.1.0",
-  "description": "File upload on naver blog",
-  "main": "main.js",
-  "repository": "https://github.com/Unifox-TanKwang/Project",
-  "license": "MIT"
-}
