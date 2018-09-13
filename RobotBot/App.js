@@ -1,25 +1,49 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
-const config = require('./config.json')
-let prefix = '#';
+const bot = new Discord.Client();
+const config = require('./config.json');
 
-client.on("ready", () => {
+bot.on("ready", () => {
   console.log("Ro is comeback!!!")
 });
 
-client.on("message", (message) => {
-    if (message.content.startsWith(config.prefix + "kick")) {
+bot.on("message", (message) => {
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase(); 
+
+    if (command == "kick") {
+        let member = message.mentions.members.first();
+        member.kick().then((member) => {
+            message.channel.send(":wave: " + member.displayName + " has been successfully kicked :point_right: ");
+        }).catch(() => {
+            message.channel.send("Access Denied");
+        })
         message.channel.send("kick");
     }
-    else if (message.content.startsWith(config.prefix + "join")) {
+    else if (command == "ping") {
+        message.channel.send("pong! \` " + bot.ping + "ms`\ ");
+    }
+    else if (command == "serverinfo") {
+        let embed = new Discord.RichEmbed()
+            .setTitle("Ro bot Infomation!")
+            .setDescription("_________________________________________")
+            .addField("Id", message.guild.id)
+            .addField("Owner", message.guild.owner)
+            .addField("Owner id", message.guild.ownerID)
+            .addField("Roles", message.guild.size)
+            .addField("Region", message.guild.region)
+            .setThumbnail(message.guild.iconURL);
+
+            message.channel.send(embed);
+    }
+    else if (command == "join") {
         message.channel.send("join");
     }
-    else if (message.content.startsWith(config.prefix + "play")) {
+    else if (command == "play") {
         message.channel.send("play");
     }
-    else if (message.content.startsWith(config.prefix + "pubg_rating")) {
-        message.channel.send("pubg_rating");
+    else if (command == "pubg_reting") {
+        args[1]//user 이름
     }
 });
 
-client.login(config.token);
+bot.login(config.token);
