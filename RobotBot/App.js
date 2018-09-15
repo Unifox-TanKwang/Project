@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const bot = new Discord.Client();
 const config = require('./config.json');
 const Youtube = require('discord-youtube-api');
-const youtube = new Youtube("")
+const youtube = new Youtube("");
 
 bot.on("ready", () => {
   console.log("Ro is comeback!!!")
@@ -47,6 +47,13 @@ bot.on("message", (message) => {
             }
         } else {
             message.reply('failed!')
+        }
+    }
+    else if (command == "leave") {
+        if(message.guild.voiceConnection) {
+            message.guild.voiceConnection.disconnect();
+        } else {
+            message.reply("help! I don't leave!");
         }
     }
     else if (command == "play") {
