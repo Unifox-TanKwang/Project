@@ -38,7 +38,16 @@ bot.on("message", (message) => {
             message.channel.send(embed);
     }
     else if (command == "join") {
-        message.channel.send("join");
+        if(message.member.voiceChannel) {
+            if(!message.guild.voiceConnection) {
+                message.member.voiceChannel.join()
+                    .then(connection => {
+                        message.reply("Successfully Joined!");
+                    })
+            }
+        } else {
+            message.reply('failed!')
+        }
     }
     else if (command == "play") {
         message.channel.send("play");
