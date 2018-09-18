@@ -1,8 +1,22 @@
 const Discord = require("discord.js");
+const ytdl = require('ytdl-core');
 const bot = new Discord.Client();
 const config = require('./config.json');
 const Youtube = require('discord-youtube-api');
 const youtube = new Youtube("");
+
+var servers = {};
+
+function play(connection, message) {
+    var server = servers[message.guild.id];
+    server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}));
+    server.queue.shift();
+
+    server.dispatcher.on("end", () => {
+        if(server.queue[0]) play(connection, message);
+        else connection.disconnect();
+    });
+}
 
 bot.on("ready", () => {
   console.log("Ro is comeback!!!")
@@ -23,6 +37,8 @@ bot.on("message", (message) => {
     }
     else if (command == "ping") {
         message.channel.send("pong! \` " + bot.ping + "ms`\ ");
+        console.log(args[0]);
+        console.log(args[1]);
     }
     else if (command == "serverinfo") {
         let embed = new Discord.RichEmbed()
@@ -56,11 +72,37 @@ bot.on("message", (message) => {
             message.reply("help! I don't leave!");
         }
     }
-    else if (command == "play") {
-        message.channel.send("play");
+    else if (command == "pubg_rating") {
+        //args[1]//user 이름
     }
-    else if (command == "pubg_reting") {
-        args[1]//user 이름
+    else if (command == "play") {
+        if(!args[2]) {
+            message.channel.sendMessage("Please provide a link");
+        }
+
+        if(!message.channel.voiceChannel) {
+            message.channel.sendMessage("You must be in a voice channel");
+        }
+
+        if(!servers[message.guild.id]) servers[message.guild.id] = {
+            queue: []
+        };
+
+        var server = servers[message.guild.id];
+
+        server.queue.push(args[2]);
+        
+        play(connection, args[2]);
+    }
+    else if (command == "skip") {
+        var server = servers[message.guild.id];
+
+        if(server.dispatcher) server.dispatcher.end();
+    }
+    else if (command == "stop") {
+        var server = servers[message.guild.id];
+
+        if(message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
     }
 });
 
