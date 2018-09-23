@@ -8,17 +8,6 @@ const fs = require("fs");
 
 var servers = {};
 
-/*function play(connection, message) {
-    var server = servers[message.guild.id];
-    server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly"}));
-    server.queue.shift();
-
-    server.dispatcher.on("end", () => {
-        if(server.queue[0]) play(connection, message);
-        else connection.disconnect();
-    });
-}*/
-
 bot.on("ready", () => {
   console.log("Ro is comeback!!!")
 });
@@ -79,8 +68,16 @@ bot.on("message", (message) => {
     }
     else if (command == "play") {
         console.log(args[0]);
-        ytdl(args[0], {filter: (format) => format.container === "mp4"})
-            .pipe(fs.createWriteStream('video.mp4'));
+        //ytdl(args[0], {filter: (format) => format.container === "mp4"})
+            //.pipe(fs.createWriteStream('video.mp4'));
+        var voiceChannel = message.member.voiceChannel;
+        const streamOptions = {seek: 0, volume: 1};
+        voiceChannel.join()
+            .then(connection => {
+                const stream = ytdl(args[0], {filter: "audioonly"});
+                const dispatcher = connection.playStream(stream, streamOptions);
+            })
+            .catch(console.error);
     }
     else if (command == "skip") {
         var server = servers[message.guild.id];
