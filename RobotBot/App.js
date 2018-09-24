@@ -5,8 +5,9 @@ const config = require('./config.json');
 const Youtube = require('discord-youtube-api');
 const youtube = new Youtube("");
 const fs = require("fs");
+const fetch = require('node-fetch');
 
-var servers = {};
+const api_key = 'RGAPI-d064e017-3ce7-4f65-8e95-cfea9217e747';
 
 bot.on("ready", () => {
   console.log("Ro is comeback!!!")
@@ -63,8 +64,10 @@ bot.on("message", (message) => {
             message.reply("help! I don't leave!");
         }
     }
-    else if (command == "pubg_rating") {
-        //args[1]//user 이름
+    else if (command == "lol_rating") {
+        const summonername = args[0];
+        fetch(`https://kr.api.riotgames.com/lol/summoner/v3/summoners/by-name/${summonername}?api_key=${api_key}`)
+        //args[0]//user 이름
     }
     else if (command == "play") {
         console.log(args[0]);
