@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const ytdl = require('ytdl-core');
 const bot = new Discord.Client();
+const ytdl = require('ytdl-core');
 const config = require('./config.json');
 const Youtube = require('discord-youtube-api');
 const youtube = new Youtube("");
@@ -8,6 +8,10 @@ const fs = require("fs");
 const fetch = require('node-fetch');
 
 const api_key = 'RGAPI-d064e017-3ce7-4f65-8e95-cfea9217e747';
+
+function ping(message, bot) {
+    message.channel.send("pong! \` " + bot.ping + "ms`\ ");
+}
 
 bot.on("ready", () => {
   console.log("Ro is comeback!!!")
@@ -27,7 +31,7 @@ bot.on("message", (message) => {
         message.channel.send("kick");
     }
     else if (command == "ping") {
-        message.channel.send("pong! \` " + bot.ping + "ms`\ ");
+        ping(message, bot);
         console.log(args[0]);
         console.log(args[1]);
         console.log(args[2]);
